@@ -989,6 +989,8 @@ should_report_time(Job j)
 #ifdef HAVE_GETRUSAGE
     char *sm = "REPORTMEMORY";
     zlong reportmemory = -1;
+#else
+    static long clktck;
 #endif
 
     /* if the time keyword was used */

@@ -437,10 +437,19 @@ struct timespec {
 
 /* Posix getpgrp takes no argument, while the BSD version *
  * takes the process ID as an argument                    */
+#ifdef __VXWORKS__
+/* FIXME */
+# define GETPGRP()  getpid()
+static inline int setpgrp(pid_t pid, pid_t pgid)
+{
+	return 0;
+}
+#else
 #ifdef GETPGRP_VOID
 # define GETPGRP() getpgrp()
 #else
 # define GETPGRP() getpgrp(0)
+#endif
 #endif
 
 #ifndef HAVE_GETLOGIN

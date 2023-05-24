@@ -302,6 +302,13 @@ setlimits(char *nam)
 /**/
 #endif /* HAVE_GETRLIMIT */
 
+/* FIXME */
+pid_t fork(void)
+ {
+	zerr("fork() called.");
+	return -1;
+ }
+
 /* fork and set limits */
 
 /**/
@@ -454,6 +461,27 @@ execcursh(Estate state, int do_exec)
     this_noerrexit = 1;
 
     return lastval;
+}
+
+/* FIXME */
+
+extern int posix_spawn (pid_t * _Restrict pid, const char * _Restrict path,
+        const void * pFa,
+        const void * _Restrict pAttr,
+        char * const argv [_Restrict],
+        char * const envp [_Restrict]);
+
+int execve(const char *pathname, char *const argv[],
+                  char *const envp[])
+{
+	pid_t pid;
+	zputenv("execve() called\n");
+	if (0 == posix_spawn( &pid, pathname, NULL, NULL, argv, envp ))
+	{	
+		wait(0);
+		exit(0);
+	}
+	return -1;
 }
 
 /* execve after handling $_ and #! */
@@ -663,6 +691,7 @@ search_defpath(char *cmd, char *pbuf, int plen)
     }
     return NULL;
 }
+
 
 /* execute an external command */
 
